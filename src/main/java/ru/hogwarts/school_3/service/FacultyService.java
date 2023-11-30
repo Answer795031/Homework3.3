@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface FacultyService {
-
     Faculty addFaculty(Faculty faculty);
 
     Faculty getFaculty(Long id);

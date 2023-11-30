@@ -6,7 +6,6 @@ import ru.hogwarts.school_3.model.Student;
 import java.util.List;
 
 public interface StudentService {
-
     Student addStudent(Student student);
 
     Student getStudent(Long id);
