@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school_3.exception.StudentNotFoundException;
 import ru.hogwarts.school_3.model.Faculty;
 import ru.hogwarts.school_3.model.Student;
+import ru.hogwarts.school_3.repository.FacultyRepository;
 import ru.hogwarts.school_3.repository.StudentRepository;
 
 import java.util.List;
