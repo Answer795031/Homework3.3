@@ -15,14 +15,15 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService{
     private final StudentRepository studentRepository;
 
-    @Autowired
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
     @Override
-    public Student addStudent(Student student) { // добавление записи студента
-        return studentRepository.save(student);
+    public Student addStudent(String name, Integer age) { // добавление записи студента
+        Student student = new Student(name, age);
+        studentRepository.save(student);
+        return student;
     }
 
     @Override
@@ -34,24 +35,27 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Student updateStudent(Long id, Student student) { // изменение записи студента
+    public Student updateStudent(Long id, String name, Integer age) { // изменение записи студента
         if (studentRepository.findById(id).isEmpty()) {
-            return studentRepository.save(student);
+            return studentRepository.save(new Student(name, age));
         }
         Student existingStudent = studentRepository.findById(id).get();
-        existingStudent.setName(student.getName());
-        existingStudent.setAge(student.getAge());
+        existingStudent.setName(name);
+        existingStudent.setAge(age);
         return studentRepository.save(existingStudent);
     }
 
     @Override
     public Student removeStudent(Long id) { // удаление записи студента
+        if (studentRepository.findById(id).isEmpty()) {
+            return null;
+        }
         studentRepository.deleteById(id);
-        return null;
+        return studentRepository.findById(id).get();
     }
 
     @Override
-    public List<Student> studentsByAge(int age) { // получение всех студентов по возрасту
+    public List<Student> studentsByAge(Integer age) { // получение всех студентов по возрасту
         return studentRepository.findAll().stream()
                 .filter(student -> student.getAge() == age)
                 .collect(Collectors.toList());
@@ -63,7 +67,11 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Faculty getFaculty(Student student) {
+    public Faculty getFaculty(Long id) {
+        if (studentRepository.findById(id).isEmpty()) {
+            return null;
+        }
+        Student student = studentRepository.findById(id).get();
         return student.getFaculty();
     }
 }

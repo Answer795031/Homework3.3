@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 public class FacultyServiceImpl implements FacultyService{
     private final FacultyRepository facultyRepository;
 
-    @Autowired
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
 
     @Override
-    public Faculty addFaculty(Faculty faculty) { // добавление записи факультета
+    public Faculty addFaculty(String name, String color) { // добавление записи факультета
+        Faculty faculty = new Faculty(name, color);
         return facultyRepository.save(faculty);
     }
 
@@ -35,20 +35,23 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public Faculty updateFaculty(Long id, Faculty faculty) { // изменение записи факультета
+    public Faculty updateFaculty(Long id, String name, String color) { // изменение записи факультета
         if (facultyRepository.findById(id).isEmpty()) {
-            return facultyRepository.save(faculty);
+            return facultyRepository.save(new Faculty(name, color));
         }
         Faculty existingFaculty = facultyRepository.findById(id).get();
-        existingFaculty.setName(faculty.getName());
-        existingFaculty.setColor(faculty.getColor());
+        existingFaculty.setName(name);
+        existingFaculty.setColor(color);
         return facultyRepository.save(existingFaculty);
     }
 
     @Override
     public Faculty removeFaculty(Long id) { // удаление записи факультета
+        if (facultyRepository.findById(id).isEmpty()) {
+            return null;
+        }
         facultyRepository.deleteById(id);
-        return null;
+        return facultyRepository.findById(id).get();
     }
 
     @Override
@@ -69,7 +72,11 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public Collection<Student> getStudents(Faculty faculty) {
+    public Collection<Student> getStudents(Long id) {
+        if (facultyRepository.findById(id).isEmpty()) {
+            return null;
+        }
+        Faculty faculty = facultyRepository.findById(id).get();
         return faculty.students;
     }
 

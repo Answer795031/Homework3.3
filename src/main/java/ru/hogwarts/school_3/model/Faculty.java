@@ -5,24 +5,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 public class Faculty {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     private String name;
     private String color;
 
-    @OneToMany(mappedBy = "faculty")
-    public Set<Student> students;
+    @OneToMany(fetch = FetchType.LAZY)
+    public List<Student> students;
 
     public Faculty() {}
 
+    public Faculty(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,16 +53,6 @@ public class Faculty {
     }
 
     @Override
-    public String toString() {
-        return "Faculty{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", color='" + color + '\'' +
-                ", students=" + students +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -62,5 +63,15 @@ public class Faculty {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, color, students);
+    }
+
+    @Override
+    public String toString() {
+        return "Faculty{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", students=" + students +
+                '}';
     }
 }

@@ -18,29 +18,31 @@ public class FacultyController {
         this.facultyService = facultyService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/get")
     public Faculty getFaculty(@PathVariable Long id) {
         return facultyService.getFaculty(id);
     }
 
-    @PostMapping
-    public Faculty addFaculty(@RequestBody Faculty faculty) {
-        return facultyService.addFaculty(faculty);
+    @PostMapping("/post/{name}/{color}")
+    public Faculty addFaculty(@PathVariable String name,
+                              @PathVariable String color) {
+        return facultyService.addFaculty(name, color);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update/{name}/{color}")
     public Faculty updateFaculty(@PathVariable Long id,
-                                 @RequestBody Faculty faculty) {
-        return facultyService.updateFaculty(id, faculty);
+                                 @PathVariable String name,
+                                 @PathVariable String color) {
+        return facultyService.updateFaculty(id, name, color);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/remove")
     public Faculty removeFaculty(@PathVariable Long id) {
         return facultyService.removeFaculty(id);
     }
 
-    @GetMapping(params = "color")
-    public Collection<Faculty> facultyByColor(@RequestParam String color) {
+    @GetMapping("/color/{color}")
+    public Collection<Faculty> facultyByColor(@PathVariable String color) {
         return facultyService.facultyByColor(color);
     }
 
@@ -56,8 +58,8 @@ public class FacultyController {
         return null;
     }
 
-    @GetMapping("/student")
-    public Collection<Student> getStudents(Faculty faculty) {
-        return facultyService.getStudents(faculty);
+    @GetMapping("/student/{id}")
+    public Collection<Student> getStudents(@PathVariable Long id) {
+        return facultyService.getStudents(id);
     }
 }
