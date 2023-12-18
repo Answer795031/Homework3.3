@@ -1,140 +1,134 @@
 package ru.hogwarts.school_3.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.constraints.Max;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.hogwarts.school_3.model.Faculty;
 import ru.hogwarts.school_3.model.Student;
-import ru.hogwarts.school_3.repository.StudentRepository;
 import ru.hogwarts.school_3.service.FacultyService;
 import ru.hogwarts.school_3.service.StudentService;
 
-import java.util.Map;
-import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(StudentController.class)
-class StudentControllerWebMvcTest {
+@WebMvcTest(FacultyController.class)
+class FacultyControllerWebMvcTest {
 
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private StudentService studentService;
+    private FacultyService facultyService;
     @InjectMocks
-    private StudentController studentController;
+    private FacultyController facultyController;
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void addStudentTest() throws Exception {
+    public void addFacultyTest() throws Exception {
 
-        String name = "Max";
-        int age = 26;
+        String name = "TestFaculty";
+        String color = "Red";
         Long id = 1L;
 
-        Student student = new Student(name, age);
-        student.setId(id);
+        Faculty faculty = new Faculty(name, color);
+        faculty.setId(id);
 
-        when(studentService.addStudent(name, age)).thenReturn(student);
+        when(facultyService.addFaculty(name, color)).thenReturn(faculty);
 
-        String request = objectMapper.writeValueAsString(student);
+        String request = objectMapper.writeValueAsString(faculty);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/student/post/{name}/{age}", name, age)
+                .post("/faculty/post/{name}/{color}", name, color)
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(name))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(age));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.color").value(color));
     }
 
     @Test
-    public void getStudentTest() throws Exception {
+    public void getFacultyTest() throws Exception {
 
-        String name = "Max";
-        int age = 26;
+        String name = "TestFaculty";
+        String color = "Red";
         Long id = 1L;
 
-        Student student = new Student(name, age);
-        student.setId(id);
+        Faculty faculty = new Faculty(name, color);
+        faculty.setId(id);
 
-        String request = objectMapper.writeValueAsString(student);
+        String request = objectMapper.writeValueAsString(faculty);
 
-        when(studentService.getStudent(id)).thenReturn(student);
+        when(facultyService.getFaculty(id)).thenReturn(faculty);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/student/{id}/get", id)
+                .get("/faculty/{id}/get", id)
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(name))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(age));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.color").value(color));
     }
 
     @Test
-    public void updateStudentTest() throws Exception {
+    public void updateFacultyTest() throws Exception {
 
-        String updateName = "Pavel";
-        int updateAge = 27;
+        String updateName = "TestFaculty";
+        String updateColor = "Red";
         Long id = 1L;
 
-        Student updateStudent = new Student(updateName, updateAge);
-        updateStudent.setId(id);
+        Faculty updateFaculty = new Faculty(updateName, updateColor);
+        updateFaculty.setId(id);
 
-        String request = objectMapper.writeValueAsString(updateStudent);
+        String request = objectMapper.writeValueAsString(updateFaculty);
 
-        when(studentService.updateStudent(id, updateName, updateAge)).thenReturn(updateStudent);
+        when(facultyService.updateFaculty(id, updateName, updateColor)).thenReturn(updateFaculty);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/student/{id}/update/{name}/{age}", id, updateName, updateAge)
+                .put("/faculty/{id}/update/{name}/{color}", id, updateName, updateColor)
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(updateName))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(updateAge))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.color").value(updateColor))
                 .andReturn();
     }
 
     @Test
-    public void removeStudentTest() throws Exception {
+    public void removeFacultyTest() throws Exception {
 
-        String name = "Max";
-        int age = 26;
+        String name = "TestFaculty";
+        String color = "Red";
         Long id = 1L;
 
-        Student removedStudent = new Student(name, age);
-        removedStudent.setId(id);
+        Faculty removedFaculty = new Faculty(name, color);
+        removedFaculty.setId(id);
 
-        String request = objectMapper.writeValueAsString(removedStudent);
+        String request = objectMapper.writeValueAsString(removedFaculty);
 
-        when(studentService.removeStudent(id)).thenReturn(removedStudent);
+        when(facultyService.removeFaculty(id)).thenReturn(removedFaculty);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/student/{id}/remove", id)
+                .delete("/faculty/{id}/remove", id)
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(name))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(age))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.color").value(color))
                 .andReturn();
     }
 }

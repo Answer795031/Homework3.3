@@ -142,5 +142,4 @@ class FacultyControllerRestTemplateTest {
                         id))
                 .isNotNull();
     }
-
 }

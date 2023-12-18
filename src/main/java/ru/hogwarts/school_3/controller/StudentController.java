@@ -29,7 +29,7 @@ public class StudentController {
         return studentService.addStudent(name, age);
     }
 
-    @PutMapping("/{id}/update/{name}/{age}")
+    @RequestMapping(value = "/{id}/update/{name}/{age}", method = RequestMethod.PUT)
     public Student updateStudent(@PathVariable Long id,
                                  @PathVariable String name,
                                  @PathVariable Integer age) {

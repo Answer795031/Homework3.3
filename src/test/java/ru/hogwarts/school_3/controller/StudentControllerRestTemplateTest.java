@@ -26,7 +26,6 @@ public class StudentControllerRestTemplateTest {
         Assertions.assertThat(studentController).isNotNull();
     }
 
-
     /**
      * Для теста выбрано сравнение isNotNull, так как генерация id происходит на уровне БД, соответственно,
      * id студента, которого возвращает БД заранее неизвестен и сравнение не проходит.
